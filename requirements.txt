@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+psycopg[binary]
+python-multipart
+itsdangerous
+python-dotenv
+jinja2
+razorpay

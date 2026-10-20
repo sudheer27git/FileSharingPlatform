@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FileNest — Secure File Workspace</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <section id="authScreen" class="auth-wrap">
+    <div class="auth-card">
+      <div class="brand-mark">F</div>
+      <h1>Welcome to FileNest</h1>
+      <p class="muted">A simpler home for your files.</p>
+      <div class="tabs">
+        <button id="signinTab" class="tab active" type="button">Sign in</button>
+        <button id="signupTab" class="tab" type="button">Create account</button>
+      </div>
+      <form id="authForm">
+        <label for="username">Username or email</label>
+        <input id="username" name="username" required autocomplete="username" placeholder="you or you@example.com">
+        <div id="emailWrap" class="hidden">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com">
+        </div>
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" minlength="10" maxlength="128" required autocomplete="current-password" placeholder="At least 10 characters">
+        <button id="authSubmit" class="btn primary wide" type="submit">Sign in</button>
+        <p id="authError" class="error" role="alert"></p>
+      </form>
+      <p class="tiny muted">Local development workspace · PostgreSQL</p>
+    </div>
+  </section>
+
+  <section id="appScreen" class="hidden">
+    <aside class="sidebar">
+      <a href="#" class="brand"><span class="brand-mark small">F</span> FileNest</a>
+      <p class="nav-caption">WORKSPACE</p>
+      <button class="nav-link selected" data-page="files" type="button">▦ &nbsp; My files</button>
+      <button class="nav-link" data-page="pricing" type="button">◇ &nbsp; Plans & payments</button>
+      <button class="nav-link" data-page="history" type="button">↻ &nbsp; Payment history</button>
+      <div class="sidebar-bottom">
+        <div class="avatar" id="avatar">U</div>
+        <div class="profile"><strong id="profileName">User</strong><span id="profilePlan">Starter plan</span></div>
+        <button id="signoutBtn" class="signout" type="button" title="Sign out">↪</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div><p class="eyebrow">YOUR WORKSPACE</p><h1 id="pageTitle">My files</h1></div>
+        <div class="top-user">Signed in as <strong id="topUsername"></strong></div>
+      </header>
+
+      <section id="filesPage" class="page">
+        <div class="hero">
+          <div><p class="eyebrow light">FILE MANAGEMENT, MADE SIMPLE</p><h2>Everything in one place.</h2><p>Upload, organize and access your personal files.</p></div>
+          <div class="hero-mark">↗</div>
+        </div>
+        <div class="stats">
+          <article class="stat"><span class="stat-icon blue">▤</span><p>Total files</p><strong id="fileCount">0</strong></article>
+          <article class="stat"><span class="stat-icon purple">◫</span><p>Storage used</p><strong id="storageUsed">0 B</strong></article>
+          <article class="stat"><span class="stat-icon green">✓</span><p>Current plan</p><strong id="currentPlan">Starter</strong></article>
+        </div>
+        <section class="panel">
+          <div class="panel-head"><div><h2>All files</h2><p class="muted">Files are private to your account.</p></div><label for="fileInput" class="btn primary">+ Upload file</label><input id="fileInput" type="file" hidden></div>
+          <div id="dropZone" class="dropzone"><div class="upload-icon">↑</div><strong>Drop a file here or choose a file</strong><p class="muted">Maximum 25 MB per file</p><label for="fileInput" class="btn secondary">Choose file</label><p id="uploadStatus" class="muted" aria-live="polite"></p></div>
+          <div class="toolbar"><h3>Your files <span id="listCount" class="pill">0</span></h3><input id="searchInput" class="search" type="search" placeholder="Search files..." aria-label="Search files"></div>
+          <div class="table-wrap"><table><thead><tr><th>NAME</th><th>SIZE</th><th>DATE ADDED</th><th>ACTIONS</th></tr></thead><tbody id="fileTable"><tr><td colspan="4" class="empty">Loading files…</td></tr></tbody></table></div>
+        </section>
+      </section>
+
+      <section id="pricingPage" class="page hidden">
+        <div class="page-intro"><p class="eyebrow">SIMPLE, TRANSPARENT PRICING</p><h2>Choose your plan</h2><p class="muted">Select a plan that fits your file storage needs.</p></div>
+        <div id="paymentNotice" class="notice hidden"></div>
+        <div class="plans">
+          <article class="plan-card"><span class="plan-tag">FREE</span><h3>Starter</h3><p class="muted">For trying FileNest</p><div class="price">₹0 <small>/ forever</small></div><ul><li>250 MB storage allowance</li><li>Private file dashboard</li><li>Upload and download</li></ul><button class="btn secondary wide" disabled>Included</button></article>
+          <article class="plan-card featured"><span class="plan-tag">POPULAR</span><h3>Pro</h3><p class="muted">For personal projects</p><div class="price">₹199 <small>/ one-time demo purchase</small></div><ul><li>10 GB storage allowance</li><li>Private file dashboard</li><li>File management</li><li>Payment history</li></ul><button class="btn primary wide pay-btn" data-plan="pro">Choose Pro</button></article>
+          <article class="plan-card"><span class="plan-tag">TEAMS</span><h3>Team</h3><p class="muted">For group workflows</p><div class="price">₹499 <small>/ one-time demo purchase</small></div><ul><li>50 GB storage allowance</li><li>Private file dashboard</li><li>File management</li><li>Payment history</li></ul><button class="btn primary wide pay-btn" data-plan="team">Choose Team</button></article>
+        </div>
+        <p class="tiny muted security-note">Demo prices are one-time payments, not recurring subscriptions. Configure Razorpay test credentials before checkout. No real charge should be made during test mode.</p>
+      </section>
+
+      <section id="historyPage" class="page hidden">
+        <div class="page-intro"><p class="eyebrow">BILLING</p><h2>Payment history</h2><p class="muted">Review payment attempts associated with your account.</p></div>
+        <section class="panel"><div class="table-wrap"><table><thead><tr><th>ORDER</th><th>PLAN</th><th>AMOUNT</th><th>STATUS</th><th>DATE</th></tr></thead><tbody id="paymentTable"><tr><td colspan="5" class="empty">Loading payment history…</td></tr></tbody></table></div></section>
+      </section>
+      <footer>FileNest · Local development build</footer>
+    </main>
+  </section>
+
+  <!-- Razorpay Checkout is loaded only when the user chooses a paid plan. Internet is required. -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
+</body>
+</html>
